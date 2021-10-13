@@ -1,15 +1,12 @@
 ﻿Imports JHSoftware.SimpleDNS.Plugin
 
 Public Class SkipPlugIn
-  Implements ISkipPlugIn
+  Implements ISkip
+  Implements IOptionsUI
 
   Dim SkipCount As Integer
 
-#Region "events"
-  Public Event AsyncError(ByVal ex As System.Exception) Implements JHSoftware.SimpleDNS.Plugin.IPlugInBase.AsyncError
-  Public Event LogLine(ByVal text As String) Implements JHSoftware.SimpleDNS.Plugin.IPlugInBase.LogLine
-  Public Event SaveConfig(ByVal config As String) Implements JHSoftware.SimpleDNS.Plugin.IPlugInBase.SaveConfig
-#End Region
+  Public Property Host As IHost Implements IPlugInBase.Host
 
 #Region "not implemented"
   Public Function InstanceConflict(ByVal config1 As String, ByVal config2 As String, ByRef errorMsg As String) As Boolean Implements JHSoftware.SimpleDNS.Plugin.IPlugInBase.InstanceConflict
@@ -23,14 +20,12 @@ Public Class SkipPlugIn
     Return ""
   End Function
 
-  Public Sub StartService() Implements JHSoftware.SimpleDNS.Plugin.IPlugInBase.StartService
-  End Sub
+  Public Function StartService() As System.Threading.Tasks.Task Implements IPlugInBase.StartService
+    Return Threading.Tasks.Task.CompletedTask
+  End Function
 
   Public Sub StopService() Implements JHSoftware.SimpleDNS.Plugin.IPlugInBase.StopService
   End Sub
-
-  Public Function GetDNSAskAbout() As JHSoftware.SimpleDNS.Plugin.DNSAskAbout Implements JHSoftware.SimpleDNS.Plugin.ISkipPlugIn.GetDNSAskAbout
-  End Function
 
 #End Region
 
@@ -38,21 +33,19 @@ Public Class SkipPlugIn
     With GetPlugInTypeInfo
       .Name = "Skip"
       .Description = "Use to skip other plug-in instances"
-      .InfoURL = "http://www.simpledns.com/kb.aspx?kbid=1262"
-      .ConfigFile = False
-      .MultiThreaded = False
+      .InfoURL = "https://simpledns.plus/kb/186/skip-plug-in"
     End With
   End Function
 
-  Public Sub LoadConfig(ByVal config As String, ByVal instanceID As Guid, ByVal dataPath As String, ByRef maxThreads As Integer) Implements JHSoftware.SimpleDNS.Plugin.IPlugInBase.LoadConfig
+  Public Sub LoadConfig(ByVal config As String, ByVal instanceID As Guid, ByVal dataPath As String) Implements JHSoftware.SimpleDNS.Plugin.IPlugInBase.LoadConfig
     SkipCount = Integer.Parse(config)
   End Sub
 
-  Public Function Lookup(ByVal request As JHSoftware.SimpleDNS.Plugin.IDNSRequest) As Integer Implements JHSoftware.SimpleDNS.Plugin.ISkipPlugIn.Lookup
-    Return SkipCount
+  Public Function LookupSkip(request As IDNSRequest) As Threading.Tasks.Task(Of Integer) Implements ISkip.LookupSkip
+    Return Threading.Tasks.Task.FromResult(SkipCount)
   End Function
 
-  Public Function GetOptionsUI(ByVal instanceID As Guid, ByVal dataPath As String) As JHSoftware.SimpleDNS.Plugin.OptionsUI Implements JHSoftware.SimpleDNS.Plugin.IPlugInBase.GetOptionsUI
+  Public Function GetOptionsUI(ByVal instanceID As Guid, ByVal dataPath As String) As JHSoftware.SimpleDNS.Plugin.OptionsUI Implements JHSoftware.SimpleDNS.Plugin.IOptionsUI.GetOptionsUI
     Return New OptionsUI
   End Function
 
