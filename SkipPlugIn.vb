@@ -29,11 +29,11 @@ Public Class SkipPlugIn
 
 #End Region
 
-  Public Function GetPlugInTypeInfo() As JHSoftware.SimpleDNS.Plugin.IPlugInBase.PlugInTypeInfo Implements JHSoftware.SimpleDNS.Plugin.IPlugInBase.GetPlugInTypeInfo
+  Public Function GetPlugInTypeInfo() As JHSoftware.SimpleDNS.Plugin.IPlugInBase.PlugInTypeInfo Implements JHSoftware.SimpleDNS.Plugin.IPlugInBase.GetTypeInfo
     With GetPlugInTypeInfo
       .Name = "Skip"
       .Description = "Use to skip other plug-in instances"
-      .InfoURL = "https://simpledns.plus/kb/186/skip-plug-in"
+      .InfoURL = "https://simpledns.plus/plugin-skip"
     End With
   End Function
 
@@ -41,7 +41,7 @@ Public Class SkipPlugIn
     SkipCount = Integer.Parse(config)
   End Sub
 
-  Public Function LookupSkip(request As IDNSRequest) As Threading.Tasks.Task(Of Integer) Implements ISkip.LookupSkip
+  Public Function LookupSkip(request As IRequestContext) As Threading.Tasks.Task(Of Integer) Implements ISkip.LookupSkip
     Return Threading.Tasks.Task.FromResult(SkipCount)
   End Function
 
