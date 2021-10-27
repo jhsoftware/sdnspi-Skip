@@ -13,13 +13,6 @@ Public Class SkipPlugIn
     Return False
   End Function
 
-  Public Sub LoadState(ByVal state As String) Implements JHSoftware.SimpleDNS.Plugin.IPlugInBase.LoadState
-  End Sub
-
-  Public Function SaveState() As String Implements JHSoftware.SimpleDNS.Plugin.IPlugInBase.SaveState
-    Return ""
-  End Function
-
   Public Function StartService() As System.Threading.Tasks.Task Implements IPlugInBase.StartService
     Return Threading.Tasks.Task.CompletedTask
   End Function
@@ -29,7 +22,7 @@ Public Class SkipPlugIn
 
 #End Region
 
-  Public Function GetPlugInTypeInfo() As JHSoftware.SimpleDNS.Plugin.IPlugInBase.PlugInTypeInfo Implements JHSoftware.SimpleDNS.Plugin.IPlugInBase.GetTypeInfo
+  Public Function GetPlugInTypeInfo() As TypeInfo Implements JHSoftware.SimpleDNS.Plugin.IPlugInBase.GetTypeInfo
     With GetPlugInTypeInfo
       .Name = "Skip"
       .Description = "Use to skip other plug-in instances"
